@@ -1,13 +1,14 @@
-# -*- coding: utf-8 -*-
+# -- coding: utf-8 --
 import heapq
-
+import bitarray
 from Node import Node
+
 
 # read the file to be encoded
 file = open("test.txt", "r")
 input = file.read()
 
-# making a dictionary to store the frequency  
+# making a dictionary to store the frequency
 freq = {}
 nodes = []
 
@@ -16,7 +17,7 @@ for ch in input:
     if ch in freq:
         freq[ch] = freq[ch] + 1
     else:
-        freq[ch] = 1  
+        freq[ch] = 1
 
 # calculate the propability of each symbol and make a heap
 for key in freq:
@@ -29,24 +30,36 @@ while(len(nodes) != 1):
     parent = Node(None, left.prob + right.prob)
     parent.left = left
     parent.right = right
-    heapq.heappush(nodes, parent)    
+    heapq.heappush(nodes, parent)
 inverseCode = {}
 codes = {}
 nodes[0].inorderTraversal(nodes[0], '', codes, inverseCode)
+
 # writing codes to encoded file
-encoded = open("encode.txt","w+")
+encoded = open("encode.bin", "wb")
+codess = ''
 for char in input:
-    encoded.write(codes[char])
-encoded.close()    
-# opeing file for write and open the encode file a decode in the decode file
-encodedReader = open("encode.txt","r+")
-encodedReader = file.read()
-decoded = open("decoded.txt","w+")
-currentCode = ''
+    codess += codes[char]
+ba = bitarray.bitarray(codess)
+encoded.write(ba)
+encoded.close()
+
+# opening file for write and open the encode file a decode in the decode file
+encodedReader = bitarray.bitarray()
+file = open("encode.bin", "rb")
+encodedReader.fromfile(file)
 print(encodedReader)
+decoded = open("decoded.txt", "w")
+currentCode = ''
 for char in encodedReader:
-    currentCode += char
+    if(char):
+        currentCode += '1'
+    else:
+        currentCode += '0'
+
     print(currentCode)
     if currentCode in inverseCode:
         decoded.write(inverseCode[currentCode])
         currentCode = ''
+
+
