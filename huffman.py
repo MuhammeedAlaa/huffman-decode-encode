@@ -5,7 +5,7 @@ from Node import Node
 
 
 # read the file to be encoded
-file = open("test.txt", "r")
+file = open("input.txt", "r")
 input = file.read()
 
 # making a dictionary to store the frequency
@@ -40,15 +40,14 @@ encoded = open("encode.bin", "wb")
 codess = ''
 for char in input:
     codess += codes[char]
-ba = bitarray.bitarray(codess)
-encoded.write(ba)
+binary = bitarray.bitarray(codess)
+encoded.write(binary)
 encoded.close()
 
 # opening file for write and open the encode file a decode in the decode file
 encodedReader = bitarray.bitarray()
 file = open("encode.bin", "rb")
 encodedReader.fromfile(file)
-print(encodedReader)
 decoded = open("decoded.txt", "w")
 currentCode = ''
 for char in encodedReader:
@@ -56,8 +55,6 @@ for char in encodedReader:
         currentCode += '1'
     else:
         currentCode += '0'
-
-    print(currentCode)
     if currentCode in inverseCode:
         decoded.write(inverseCode[currentCode])
         currentCode = ''
