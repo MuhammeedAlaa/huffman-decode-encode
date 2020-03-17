@@ -19,10 +19,10 @@ class Node:
     def inorderTraversal(self, root, currentCode, codes, inverseCode):
         if root:
             self.inorderTraversal(root.left, currentCode + '0', codes, inverseCode)
+            self.inorderTraversal(root.right, currentCode+ '1', codes, inverseCode)
             if not root.symbol is None:
                 codes[root.symbol] = currentCode
                 inverseCode[currentCode] = root.symbol
-            self.inorderTraversal(root.right, currentCode+ '1', codes, inverseCode)
         return
 
 

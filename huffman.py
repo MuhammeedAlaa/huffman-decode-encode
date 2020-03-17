@@ -18,23 +18,31 @@ for ch in input:
         freq[ch] = freq[ch] + 1
     else:
         freq[ch] = 1
-
 # calculate the propability of each symbol and make a heap
 for key in freq:
     heapq.heappush(nodes, Node(key, freq[key] / len(input) ))
 
 # apply the huffman algorithm to make the tree where symbols are the leaves
-while(len(nodes) != 1):
+
+if len(nodes) == 1:
+    left = heapq.heappop(nodes)
+    parent = Node(None, left.prob)
+    parent.left = left
+    heapq.heappush(nodes, parent) 
+
+while len(nodes) != 1:
     left = heapq.heappop(nodes)
     right = heapq.heappop(nodes)
     parent = Node(None, left.prob + right.prob)
     parent.left = left
     parent.right = right
-    heapq.heappush(nodes, parent)
+    heapq.heappush(nodes, parent)         
+   
+   
 inverseCode = {}
 codes = {}
 nodes[0].inorderTraversal(nodes[0], '', codes, inverseCode)
-
+print(codes)
 # writing codes to encoded file
 encoded = open("encode.bin", "wb")
 codess = ''
@@ -45,10 +53,11 @@ encoded.write(binary)
 encoded.close()
 
 # opening file for write and open the encode file a decode in the decode file
-encodedReader = bitarray.bitarray()
 file = open("encode.bin", "rb")
+encodedReader = bitarray.bitarray()
 encodedReader.fromfile(file)
-decoded = open("decoded.txt", "w")
+decoded = open("decoded.txt", "w+")
+print(encodedReader)
 currentCode = ''
 for char in encodedReader:
     if(char):
