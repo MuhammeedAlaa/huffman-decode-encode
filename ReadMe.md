@@ -7,5 +7,5 @@
      convert is to the original txt
    
    Section: 2
-   Student1: muhammad alaa abd el khalek ahmed BN: 24
-   Student2: muhammad ahmed hisham mahmoud BN: 17
+  - Student1: muhammad alaa abd el khalek ahmed BN: 24
+  - Student2: muhammad ahmed hisham mahmoud BN: 17
