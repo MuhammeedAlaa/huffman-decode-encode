@@ -42,13 +42,15 @@ while len(nodes) != 1:
 inverseCode = {}
 codes = {}
 nodes[0].inorderTraversal(nodes[0], '', codes, inverseCode)
-print(codes)
 # writing codes to encoded file
 encoded = open("encode.bin", "wb")
-codess = ''
+encodedBinary = ''
 for char in input:
-    codess += codes[char]
-binary = bitarray.bitarray(codess)
+    encodedBinary += codes[char]
+padding = 8 - (len(encodedBinary) % 8)
+padding = f'{padding:08b}'
+encodedBinary = padding + encodedBinary
+binary = bitarray.bitarray(encodedBinary)
 encoded.write(binary)
 encoded.close()
 
@@ -57,10 +59,12 @@ file = open("encode.bin", "rb")
 encodedReader = bitarray.bitarray()
 encodedReader.fromfile(file)
 decoded = open("decoded.txt", "w+")
-print(encodedReader)
+padding = encodedReader[:8]
+padding = int(padding.to01(), 2)
+encodedReader = encodedReader[8: -1*padding]
 currentCode = ''
 for char in encodedReader:
-    if(char):
+    if char:
         currentCode += '1'
     else:
         currentCode += '0'
